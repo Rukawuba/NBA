@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
   # Example data to pass to the template
-  data = {'title': 'My Flask App', 'message': 'Welcome!'}
+  data = {'title': 'My Flask App', 'message': 'Welcome! This is the first instance of Flask to build on- > Wednesday, April 24'}
   return render_template('index.html', data=data)  # Render index.html with data
 
 # Run the application in debug mode (for development)
