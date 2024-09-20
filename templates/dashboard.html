@@ -1,0 +1,114 @@
+<!-- templates/    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        async function fetchData() {
+            // Fetch player performance data
+            const performanceResponse = await fetch('/performance_data');
+            const performanceData = await performanceResponse.json();
+
+            // Fetch game results data
+            const gameResultsResponse = await fetch('/game_results_data');
+            const gameResultsData = await gameResultsResponse.json();
+
+            // Process and visualize player performance data
+            const ctx1 = document.getElementById('playerPerformanceChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: performanceData.map(d => d.player_name),
+                    datasets: [{
+                        label: 'Points Scored',
+                        data: performanceData.map(d => d.points_scored),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            // Process and visualize game results data
+            const ctx2 = document.getElementById('gameResultsChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: gameResultsData.map(d => d.game_date),
+                    datasets: [{
+                        label: 'Wins',
+                        data: gameResultsData.map(d => d.wins),
+                        borderColor: 'green',
+                        fill: false
+                    },
+                    {
+                        label: 'Losses',
+                        data: gameResultsData.map(d => d.losses),
+                        borderColor: 'red',
+                        fill: false
+                    }]
+                }
+            });
+        }
+
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <h1>Dashboard for {{ user_id }}</h1>
+    <canvas id="playerPerformanceChart"></canvas>
+    <canvas id="gameResultsChart"></canvas>
+</body>
+</html>
+
+ashboard.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        async function fetchData() {
+            // Fetch team statistics
+            const response = await fetch('/team_stats');
+            const data = await response.json();
+
+            // Process and visualize team stats data
+            const ctx = document.getElementById('teamStatsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.team_name),
+                    datasets: [{
+                        label: 'Win Percentage',
+                        data: data.map(d => d.win_percentage),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) { return value + '%'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = fetchData;
+    </script>
+</head>
+<body>
+    <h1>Team Statistics</h1>
+    <canvas id="teamStatsChart"></canvas>
+</body>
+</html>
